@@ -1,15 +1,14 @@
 /* import { goto } from "@sveltejs/kit/assets/runtime/app/navigation";
 import { page } from "@sveltejs/kit/assets/runtime/app/stores"; */
 import type { LoadInput } from "@sveltejs/kit";
-import type { ClientRequestConfig } from "./types";
 
-interface SignInConfig extends ClientRequestConfig {
+interface SignInConfig {
   redirectUrl?: string;
 }
 
 export async function signIn(provider: string, data?: any, config?: SignInConfig) {
   if (data) {
-    const path = mergePath(["/api/auth", config?.basePath ?? null], `/callback/${provider}`);
+    const path = `/api/auth/callback/${provider}`;
     const res = await fetch(path, {
       method: "POST",
       headers: {
@@ -35,7 +34,7 @@ export async function signIn(provider: string, data?: any, config?: SignInConfig
     redirect: redirectUrl ?? "/",
   };
   const query = new URLSearchParams(queryData);
-  const path = mergePath(["/api/auth", config?.basePath ?? null], `/signin/${provider}?${query}`);
+  const path = `/api/auth/login/${provider}?${query}`;
 
   return path; // await goto(path);
 }
